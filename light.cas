@@ -1,0 +1,32 @@
+data
+    struct Point {
+        dword x;
+        dword y;
+    };
+
+    struct Point3 {
+        dword z;
+    };
+
+    Point first;
+    Point second;
+    qword test;
+    qword test2;
+    byte test0;
+    word test1;
+
+    byte arr (10);
+    word vec (15);
+code
+    function cassio() {
+        rbx <- arr + 5;
+        [rbx] <- 12;
+        [test] <- 10 * rbx;
+    };
+
+    function test() {
+        rdx <- 5 and 10;
+        [first.x] <- 2 or 1;
+        rcx <- "Hello, World!";
+    };
+
