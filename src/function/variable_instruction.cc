@@ -55,14 +55,19 @@ std::string VariableInstruction::Generate() {
     throw SemanticError("cannot assign to address");
   }
   else {
+    std::ostringstream oss;
 
+
+
+    if (more_)
+      oss << more_->Generate();
+
+    return oss.str();
   }
 }
 
 void VariableInstruction::Semanticate() {
   variable_->Semanticate();
-
-
 
   if (value_)
     value_->Semanticate();

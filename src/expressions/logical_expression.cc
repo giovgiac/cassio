@@ -6,6 +6,8 @@
  *
  */
 
+#include <core/semantic_error.h>
+#include <core/syntax_error.h>
 #include <expressions/logical_expression.h>
 
 namespace cassio {
@@ -29,7 +31,7 @@ LogicalType ConvertToLogicalType(TokenType type) {
   }
 }
 
-std::unique_ptr<Expression> LogicalExpression::Construct(std::list<Token> &tokens, std::unique_ptr<Expression> first) {
+std::unique_ptr<LogicalExpression> LogicalExpression::Construct(std::list<Token> &tokens, std::unique_ptr<Expression> first) {
   std::unique_ptr<LogicalExpression> result = nullptr;
   TokenType type = tokens.front().GetType();
 
@@ -48,18 +50,53 @@ std::unique_ptr<Expression> LogicalExpression::Construct(std::list<Token> &token
     result->second_ = std::move(Expression::Construct(tokens));
   }
   else {
-    return std::move(first);
+    throw SyntaxError("expected a logical expression at if condition",
+        tokens.front().GetLine(),
+        tokens.front().GetColumn());
   }
 
   return std::move(result);
 }
 
 std::string LogicalExpression::Generate() {
+  std::ostringstream oss;
 
+  oss << second_->Generate();
+  oss << "\tmov\trcx, rax";
+  oss << "\n";
+  oss << first_->Generate();
+  oss << "\tcmp\trax, rcx";
+  oss << "\n";
+
+  if (type_ == LogicalType::EQUALS) {
+    oss << "\tje\t";
+  }
+  else if (type_ == LogicalType::NOT_EQUALS) {
+    oss << "\tjne\t";
+  }
+  else if (type_ == LogicalType::GREATER_THAN) {
+    oss << "\tjg\t";
+  }
+  else if (type_ == LogicalType::GREATER_EQUALS) {
+    oss << "\tjge\t";
+  }
+  else if (type_ == LogicalType::LESS_THAN) {
+    oss << "\tjb\t";
+  }
+  else if (type_ == LogicalType::LESS_EQUALS) {
+    oss << "\tjbe\t";
+  }
+
+  if (more_)
+    oss << more_->Generate();
+
+  return oss.str();
 }
 
 void LogicalExpression::Semanticate() {
 
+  if (more_)
+    throw SemanticError("unexpected multiple expressions at logical expression");
 }
 
 }

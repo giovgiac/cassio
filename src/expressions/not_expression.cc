@@ -18,11 +18,21 @@ std::unique_ptr<Expression> NotExpression::Construct(std::unique_ptr<Expression>
 }
 
 std::string NotExpression::Generate() {
+  std::ostringstream oss;
 
+  oss << first_->Generate();
+  oss << "\tnot\trax";
+  oss << "\n";
+
+  if (more_)
+    oss << more_->Generate();
+
+  return oss.str();
 }
 
 void NotExpression::Semanticate() {
-
+  if (more_)
+    more_->Semanticate();
 }
 
 }

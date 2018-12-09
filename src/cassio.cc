@@ -21,6 +21,11 @@
 int main(int argc, char *argv[]) {
   if (argc == 3) {
     std::string source_code = cassio::File::ReadFile(argv[1]);
+    if (source_code.empty()) {
+      std::cout << "\033[1;31merror:\033[0m file not found" << std::endl;
+      return EXIT_FAILURE;
+    }
+
     std::string_view source_code_view{source_code};
     std::unique_ptr<cassio::Program> program;
     auto& ref = cassio::SemanticAnalyzer::variables_;

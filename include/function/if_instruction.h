@@ -9,7 +9,7 @@
 #ifndef FUNCTION_IF_INSTRUCTION_H_
 #define FUNCTION_IF_INSTRUCTION_H_
 
-#include <expressions/expression.h>
+#include <expressions/logical_expression.h>
 #include <function/instruction.h>
 
 namespace cassio {
@@ -28,9 +28,12 @@ class IfInstruction : public Instruction {
   void Semanticate() override;
 
  private:
-  std::unique_ptr<Expression> condition_;
+  uint64_t id_;
+  std::unique_ptr<LogicalExpression> condition_;
   std::unique_ptr<Instruction> instruction_;
   std::unique_ptr<Instruction> else_;
+
+  static uint64_t global_id;
 };
 
 }

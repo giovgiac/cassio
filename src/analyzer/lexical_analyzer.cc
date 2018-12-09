@@ -162,6 +162,30 @@ std::list<Token> Lex(const std::string_view &source_code) {
       i += Length(or_literal);
       continue;
     }
+    else if (source_code.substr(i, Length(inputi_literal)) == inputi_literal) {
+      tokens.emplace_back(Token{TokenType::INPUTI, inputi_literal, line, column});
+      column += Length(inputi_literal);
+      i += Length(inputi_literal);
+      continue;
+    }
+    else if (source_code.substr(i, Length(inputs_literal)) == inputs_literal) {
+      tokens.emplace_back(Token{TokenType::INPUTS, inputs_literal, line, column});
+      column += Length(inputs_literal);
+      i += Length(inputs_literal);
+      continue;
+    }
+    else if (source_code.substr(i, Length(outputi_literal)) == outputi_literal) {
+      tokens.emplace_back(Token{TokenType::OUTPUTI, outputi_literal, line, column});
+      column += Length(outputi_literal);
+      i += Length(outputi_literal);
+      continue;
+    }
+    else if (source_code.substr(i, Length(outputs_literal)) == outputs_literal) {
+      tokens.emplace_back(Token{TokenType::OUTPUTS, outputs_literal, line, column});
+      column += Length(outputs_literal);
+      i += Length(outputs_literal);
+      continue;
+    }
     else if (source_code.substr(i, Length(plus_literal)) == plus_literal) {
       tokens.emplace_back(Token{TokenType::PLUS, plus_literal, line, column});
       column += Length(plus_literal);
@@ -204,18 +228,6 @@ std::list<Token> Lex(const std::string_view &source_code) {
       i += Length(not_equal_literal);
       continue;
     }
-    else if (source_code.substr(i, Length(greater_than_literal)) == greater_than_literal) {
-      tokens.emplace_back(Token{TokenType::GREATER_THAN, greater_than_literal, line, column});
-      column += Length(greater_than_literal);
-      i += Length(greater_than_literal);
-      continue;
-    }
-    else if (source_code.substr(i, Length(less_than_literal)) == less_than_literal) {
-      tokens.emplace_back(Token{TokenType::LESS_THAN, less_than_literal, line, column});
-      column += Length(less_than_literal);
-      i += Length(less_than_literal);
-      continue;
-    }
     else if (source_code.substr(i, Length(greater_equals_literal)) == greater_equals_literal) {
       tokens.emplace_back(Token{TokenType::GREATER_EQUALS, greater_equals_literal, line, column});
       column += Length(greater_equals_literal);
@@ -226,6 +238,18 @@ std::list<Token> Lex(const std::string_view &source_code) {
       tokens.emplace_back(Token{TokenType::LESS_EQUALS, less_equals_literal, line, column});
       column += Length(less_equals_literal);
       i += Length(less_equals_literal);
+      continue;
+    }
+    else if (source_code.substr(i, Length(greater_than_literal)) == greater_than_literal) {
+      tokens.emplace_back(Token{TokenType::GREATER_THAN, greater_than_literal, line, column});
+      column += Length(greater_than_literal);
+      i += Length(greater_than_literal);
+      continue;
+    }
+    else if (source_code.substr(i, Length(less_than_literal)) == less_than_literal) {
+      tokens.emplace_back(Token{TokenType::LESS_THAN, less_than_literal, line, column});
+      column += Length(less_than_literal);
+      i += Length(less_than_literal);
       continue;
     }
     else if (source_code.substr(i, Length(single_quote_literal)) == single_quote_literal) {

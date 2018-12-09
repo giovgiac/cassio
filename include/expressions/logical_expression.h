@@ -36,7 +36,7 @@ enum class LogicalType {
  */
 class LogicalExpression : public Expression {
  public:
-  static std::unique_ptr<Expression> Construct(std::list<Token> &tokens, std::unique_ptr<Expression> first);
+  static std::unique_ptr<LogicalExpression> Construct(std::list<Token> &tokens, std::unique_ptr<Expression> first);
   std::string Generate() override;
   void Semanticate() override;
 

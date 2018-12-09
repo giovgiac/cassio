@@ -14,7 +14,7 @@ std::unique_ptr<Number> Number::Construct(std::string number) {
   std::unique_ptr<Number> result = std::make_unique<Number>();
 
   result->number_ = std::move(number);
-  return result;
+  return std::move(result);
 }
 
 }

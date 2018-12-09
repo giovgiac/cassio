@@ -34,11 +34,22 @@ std::unique_ptr<Expression> FunctionExpression::Construct(std::list<Token> &toke
 }
 
 std::string FunctionExpression::Generate() {
+  std::ostringstream oss;
 
+  if (more_)
+    oss << more_->Generate();
+
+  return oss.str();
 }
 
 void FunctionExpression::Semanticate() {
+  variable_->Semanticate();
 
+  if (argument_)
+    argument_->Semanticate();
+
+  if (more_)
+    more_->Semanticate();
 }
 
 }

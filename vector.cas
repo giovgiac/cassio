@@ -1,0 +1,21 @@
+data
+    qword arr (100);
+    qword ind;
+
+code
+    function cassio() {
+        [ind] <- 0;
+
+        while ([ind] < 100) {
+            rsi <- arr + 8 * [ind];
+            [rsi] <- 2 * [ind];
+            [ind] <- [ind] + 1;
+        };
+
+        [ind] <- 0;
+        while ([ind] < 100) {
+            rcx <- arr + 8 * [ind];
+            outputi([rcx]);
+            [ind] <- [ind] + 1;
+        };
+    };

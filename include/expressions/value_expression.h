@@ -28,6 +28,7 @@ class ValueExpression : public Expression {
   void Semanticate() override;
 
  private:
+  RegisterType type_;
   std::unique_ptr<Child> variable_;
 };
 

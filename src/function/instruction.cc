@@ -9,6 +9,7 @@
 #include <core/syntax_error.h>
 #include <function/instruction.h>
 #include <function/if_instruction.h>
+#include <function/output_instruction.h>
 #include <function/register_instruction.h>
 #include <function/return_instruction.h>
 #include <function/value_instruction.h>
@@ -53,6 +54,16 @@ std::unique_ptr<Instruction> Instruction::Construct(std::list<Token> &tokens) {
     tokens.pop_front();
 
     result = std::move(ReturnInstruction::Construct(tokens));
+  }
+  else if (type == TokenType::OUTPUTI) {
+    tokens.pop_front();
+
+    result = std::move(OutputInstruction::Construct(OutputType::INTEGER, tokens));
+  }
+  else if (type == TokenType::OUTPUTS) {
+    tokens.pop_front();
+
+    result = std::move(OutputInstruction::Construct(OutputType::STRING, tokens));
   }
   else {
     return nullptr;

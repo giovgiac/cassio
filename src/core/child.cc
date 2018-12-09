@@ -67,6 +67,8 @@ std::string Child::GetType() const {
         }
       }
     }
+
+    return "";
   }
   else {
     return SemanticAnalyzer::variables_[parent_->GetText()].type_;
@@ -91,8 +93,13 @@ void Child::Semanticate() {
       }
     }
   }
+  else if (SemanticAnalyzer::functions_.find(parent_->GetText()) != SemanticAnalyzer::functions_.end()) {
+    if (child_) {
+      throw SemanticError("function cannot have child");
+    }
+  }
   else {
-    throw SemanticError(parent_->GetText() + " not defined");
+    throw SemanticError(parent_->GetText() + " is not defined");
   }
 }
 

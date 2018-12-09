@@ -26,11 +26,21 @@ std::unique_ptr<Instruction> ReturnInstruction::Construct(std::list<Token> &toke
 }
 
 std::string ReturnInstruction::Generate() {
+  std::ostringstream oss;
 
+  oss << expression_->Generate();
+  oss << "\tret";
+  oss << "\n";
+
+  if (more_)
+    oss << more_->Generate();
+
+  return oss.str();
 }
 
 void ReturnInstruction::Semanticate() {
-
+  if (more_)
+    more_->Semanticate();
 }
 
 }

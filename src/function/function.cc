@@ -141,7 +141,7 @@ std::string Function::Generate() {
       oss << "\tcall\t[exit]";
       oss << "\n";
     }
-    else {
+    if (var.return_type_ == "void") {
       oss << "\tret";
       oss << "\n";
     }

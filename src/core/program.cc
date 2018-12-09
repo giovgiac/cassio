@@ -466,6 +466,10 @@ std::string Program::Generate() {
   oss << "\n";
   oss << "\tprint_string_fmt\t\tdb \"%s\", 10, 13, 0";
   oss << "\n";
+  oss << "\tscanf_integer_fmt\t\tdb \"%d\", 0";
+  oss << "\n";
+  oss << "\tscanf_string_fmt\t\tdb \"%s\", 0";
+  oss << "\n";
   for (auto &e : SemanticAnalyzer::literals_) {
          auto lt = e.second;
          oss << "\tstring" << lt.id_ << "\t\t\t\tdb " << "\"" << lt.string_ << "\", 0";
@@ -476,8 +480,9 @@ std::string Program::Generate() {
   // Add BSS Section
   oss << "; BSS Section:\n"
          "; ======================================================================\n"
-         "segment readable writeable\n\n";
-
+         "segment readable writeable\n";
+  oss << "\tscanf_read\t\tdq ?";
+  oss << "\n\n";
   oss << declaration_->Generate();
   oss << "\n\n";
 

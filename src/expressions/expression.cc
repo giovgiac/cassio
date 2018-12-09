@@ -10,6 +10,7 @@
 #include <expressions/expression.h>
 #include <expressions/boolean_expression.h>
 #include <expressions/function_expression.h>
+#include <expressions/input_expression.h>
 #include <expressions/logical_expression.h>
 #include <expressions/low_expression.h>
 #include <expressions/math_expression.h>
@@ -79,7 +80,7 @@ std::unique_ptr<Expression> Expression::Construct(std::list<Token> &tokens,
 
     result = LowExpression::Construct(tokens, std::move(result));
     result = MathExpression::Construct(tokens, std::move(result));
-    result = LogicalExpression::Construct(tokens, std::move(result));
+    //result = LogicalExpression::Construct(tokens, std::move(result));
     result = BooleanExpression::Construct(tokens, std::move(result));
   }
   else if (type == TokenType::LEFT_BRACE) {
@@ -96,7 +97,7 @@ std::unique_ptr<Expression> Expression::Construct(std::list<Token> &tokens,
 
     result = LowExpression::Construct(tokens, std::move(result));
     result = MathExpression::Construct(tokens, std::move(result));
-    result = LogicalExpression::Construct(tokens, std::move(result));
+    //result = LogicalExpression::Construct(tokens, std::move(result));
     result = BooleanExpression::Construct(tokens, std::move(result));
   }
   else if (type == TokenType::RAX ||
@@ -111,16 +112,16 @@ std::unique_ptr<Expression> Expression::Construct(std::list<Token> &tokens,
     result = RegisterExpression::Construct(ConvertToRegisterType(type));
     result = LowExpression::Construct(tokens, std::move(result));
     result = MathExpression::Construct(tokens, std::move(result));
-    result = LogicalExpression::Construct(tokens, std::move(result));
+    //result = LogicalExpression::Construct(tokens, std::move(result));
     result = BooleanExpression::Construct(tokens, std::move(result));
   }
   else if (type == TokenType::NUMBER) {
-    result = NumberExpression::Construct(tokens.front().GetText());
+    result = std::move(NumberExpression::Construct(tokens.front().GetText()));
     tokens.pop_front();
-    result = LowExpression::Construct(tokens, std::move(result));
-    result = MathExpression::Construct(tokens, std::move(result));
-    result = LogicalExpression::Construct(tokens, std::move(result));
-    result = BooleanExpression::Construct(tokens, std::move(result));
+    result = std::move(LowExpression::Construct(tokens, std::move(result)));
+    result = std::move(MathExpression::Construct(tokens, std::move(result)));
+    //result = LogicalExpression::Construct(tokens, std::move(result));
+    result = std::move(BooleanExpression::Construct(tokens, std::move(result)));
   }
   else if (type == TokenType::LEFT_PARENTHESIS) {
     tokens.pop_front();
@@ -136,7 +137,7 @@ std::unique_ptr<Expression> Expression::Construct(std::list<Token> &tokens,
 
     result = LowExpression::Construct(tokens, std::move(result));
     result = MathExpression::Construct(tokens, std::move(result));
-    result = LogicalExpression::Construct(tokens, std::move(result));
+    //result = LogicalExpression::Construct(tokens, std::move(result));
     result = BooleanExpression::Construct(tokens, std::move(result));
   }
   else if (type == TokenType::NOT) {
@@ -145,7 +146,7 @@ std::unique_ptr<Expression> Expression::Construct(std::list<Token> &tokens,
     result = NotExpression::Construct(std::move(Expression::Construct(tokens)));
     result = LowExpression::Construct(tokens, std::move(result));
     result = MathExpression::Construct(tokens, std::move(result));
-    result = LogicalExpression::Construct(tokens, std::move(result));
+    //result = LogicalExpression::Construct(tokens, std::move(result));
     result = BooleanExpression::Construct(tokens, std::move(result));
   }
   else if (type == TokenType::SINGLE_QUOTE) {
@@ -173,6 +174,16 @@ std::unique_ptr<Expression> Expression::Construct(std::list<Token> &tokens,
 
     tokens.pop_front();
   }
+  else if (type == TokenType::INPUTI) {
+    tokens.pop_front();
+
+    result = std::move(InputExpression::Construct(InputType::INTEGER, tokens));
+  }
+  else if (type == TokenType::INPUTS) {
+    tokens.pop_front();
+
+    result = std::move(InputExpression::Construct(InputType::STRING, tokens));
+  }
   else {
     if (can_be_empty) {
       return nullptr;
@@ -197,7 +208,7 @@ std::unique_ptr<Expression> Expression::Construct(std::list<Token> &tokens,
     result->more_ = nullptr;
   }
 
-  return result;
+  return std::move(result);
 }
 
 }
