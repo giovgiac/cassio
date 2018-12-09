@@ -42,7 +42,7 @@ std::unique_ptr<Instruction> OutputInstruction::Construct(OutputType type, std::
 std::string OutputInstruction::Generate() {
   std::ostringstream oss;
 
-  oss << argument_->Generate();
+  oss << argument_->Generate(false);
 
   if (type_ == OutputType::INTEGER) {
     oss << "\tmov\trdi, print_integer_fmt";

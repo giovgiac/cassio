@@ -18,20 +18,22 @@ std::unique_ptr<Expression> VariableExpression::Construct(std::list<Token> &toke
   return result;
 }
 
-std::string VariableExpression::Generate() {
+std::string VariableExpression::Generate(bool generate_more) {
   std::ostringstream oss;
 
   oss << "\tmov\trax, " << variable_->Generate();
   oss << "\n";
 
-  if (more_)
-    oss << more_->Generate();
+  if (generate_more) {
+    if (more_)
+      oss << more_->Generate();
+  }
 
   return oss.str();
 }
 
 void VariableExpression::Semanticate() {
-  variable_->Semanticate();
+  variable_->Semanticate(true);
 
   if (variable_->GetType() != "byte" && variable_->GetType() != "word" && variable_->GetType() != "dword"
       && variable_->GetType() != "qword") {

@@ -53,6 +53,12 @@ struct Variable {
   uint64_t capacity_;
 };
 
+struct Argument {
+  std::string name_;
+  std::string type_;
+  uint64_t offset_;
+};
+
 /**
  * @struct Procedure
  * @brief
@@ -63,7 +69,7 @@ struct Variable {
 struct Procedure {
   std::string name_;
   std::string return_type_;
-
+  std::list<Argument> argument_;
 };
 
 /**
@@ -90,6 +96,7 @@ class SemanticAnalyzer {
   static std::map<std::string, UserType> user_types_;
   static std::map<std::string, Procedure> functions_;
   static std::map<uint64_t, Literal> literals_;
+  static std::string current_function_;
 };
 
 }

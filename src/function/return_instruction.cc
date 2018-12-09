@@ -6,6 +6,8 @@
  *
  */
 
+#include <analyzer/semantic_analyzer.h>
+#include <core/semantic_error.h>
 #include <core/syntax_error.h>
 #include <function/return_instruction.h>
 
@@ -28,7 +30,11 @@ std::unique_ptr<Instruction> ReturnInstruction::Construct(std::list<Token> &toke
 std::string ReturnInstruction::Generate() {
   std::ostringstream oss;
 
-  oss << expression_->Generate();
+  oss << expression_->Generate(false);
+  oss << "\tmov\trsp, rbp";
+  oss << "\n";
+  oss << "\tpop\trbp";
+  oss << "\n";
   oss << "\tret";
   oss << "\n";
 
@@ -39,6 +45,12 @@ std::string ReturnInstruction::Generate() {
 }
 
 void ReturnInstruction::Semanticate() {
+  if (SemanticAnalyzer::functions_[SemanticAnalyzer::current_function_].return_type_ == "void")
+    throw SemanticError("cannot return from a void function");
+
+  if (expression_)
+    expression_->Semanticate();
+
   if (more_)
     more_->Semanticate();
 }

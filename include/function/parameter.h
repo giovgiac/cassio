@@ -26,6 +26,8 @@ namespace cassio {
 class Parameter {
  public:
   static std::unique_ptr<Parameter> Construct(std::list<Token> &tokens, bool can_be_empty = true);
+  virtual void GetArgument(std::list<struct Argument> &args) = 0;
+  virtual void Semanticate() = 0;
 
  protected:
   std::unique_ptr<Parameter> more_;

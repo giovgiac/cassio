@@ -39,6 +39,8 @@ enum class ParameterRegister {
 class RegisterParameter : public Parameter {
  public:
   static std::unique_ptr<Parameter> Construct(std::list<Token> &tokens, ParameterRegister reg);
+  void GetArgument(std::list<struct Argument> &args) override;
+  void Semanticate() override;
 
  private:
   ParameterRegister register_;

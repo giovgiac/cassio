@@ -17,7 +17,7 @@ std::unique_ptr<Expression> RegisterExpression::Construct(RegisterType type) {
   return result;
 }
 
-std::string RegisterExpression::Generate() {
+std::string RegisterExpression::Generate(bool generate_more) {
   std::ostringstream oss;
 
   if (type_ == RegisterType::RAX) {
@@ -40,8 +40,10 @@ std::string RegisterExpression::Generate() {
   }
 
   oss << "\n";
-  if (more_)
-    more_->Generate();
+  if (generate_more) {
+    if (more_)
+      more_->Generate();
+  }
 
   return oss.str();
 }

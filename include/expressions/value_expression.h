@@ -24,7 +24,7 @@ namespace cassio {
 class ValueExpression : public Expression {
  public:
   static std::unique_ptr<Expression> Construct(std::list<Token> &tokens);
-  std::string Generate() override;
+  std::string Generate(bool generate_more) override;
   void Semanticate() override;
 
  private:

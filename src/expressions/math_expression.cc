@@ -44,7 +44,7 @@ std::unique_ptr<Expression> MathExpression::Construct(std::list<Token> &tokens, 
   return std::move(result);
 }
 
-std::string MathExpression::Generate() {
+std::string MathExpression::Generate(bool generate_more) {
   std::ostringstream oss;
 
   if (type_ == MathType::SUM) {
@@ -64,8 +64,10 @@ std::string MathExpression::Generate() {
     oss << "\n";
   }
 
-  if (more_)
-    oss << more_->Generate();
+  if (generate_more) {
+    if (more_)
+      oss << more_->Generate();
+  }
 
   return oss.str();
 }
@@ -76,6 +78,9 @@ void MathExpression::Semanticate() {
 
   if (second_)
     second_->Semanticate();
+
+  if (more_)
+    more_->Semanticate();
 }
 
 }

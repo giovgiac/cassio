@@ -128,11 +128,22 @@ std::unique_ptr<Function> Function::Construct(std::list<Token> &tokens) {
 
 std::string Function::Generate() {
   if (SemanticAnalyzer::functions_.find(identifier_->GetText()) != SemanticAnalyzer::functions_.end()) {
+    SemanticAnalyzer::current_function_ = identifier_->GetText();
+
     auto var = SemanticAnalyzer::functions_[identifier_->GetText()];
     std::ostringstream oss;
 
     oss << var.name_ << ":";
     oss << "\n";
+
+    if (var.name_ != "cassio") {
+      oss << "\tpush\trbp";
+      oss << "\n";
+      oss << "\tmov\trbp, rsp";
+      oss << "\n";
+      oss << "\tand\trsp, 0xFFFFFFFFFFFFFFF0";
+      oss << "\n";
+    }
 
     if (instruction_)
       oss << instruction_->Generate();
@@ -141,14 +152,20 @@ std::string Function::Generate() {
       oss << "\tcall\t[exit]";
       oss << "\n";
     }
-    if (var.return_type_ == "void") {
+    if (var.return_type_ == "void" && var.name_ != "cassio") {
+      oss << "\tmov\trsp, rbp";
+      oss << "\n";
+      oss << "\tpop\trbp";
+      oss << "\n";
       oss << "\tret";
       oss << "\n";
     }
 
     oss << "\n";
-    if (function_)
+    if (function_) {
+      SemanticAnalyzer::current_function_ = "";
       oss << function_->Generate();
+    }
 
     return oss.str();
   }
@@ -159,7 +176,10 @@ std::string Function::Generate() {
 
 void Function::Semanticate() {
   if (SemanticAnalyzer::functions_.find(identifier_->GetText()) == SemanticAnalyzer::functions_.end()) {
+    SemanticAnalyzer::current_function_ = identifier_->GetText();
+
     Procedure procedure = {};
+    std::list<Argument> args;
 
     if (identifier_->GetText() == "cassio")
       procedure.name_ = identifier_->GetText();
@@ -168,13 +188,22 @@ void Function::Semanticate() {
 
     procedure.return_type_ = GetReturnType(return_type_);
 
-    if (instruction_)
-      instruction_->Semanticate();
+    if (parameter_) {
+      parameter_->Semanticate();
+      parameter_->GetArgument(args);
+    }
+
+    procedure.argument_ = std::move(args);
 
     SemanticAnalyzer::functions_.emplace(std::make_pair(identifier_->GetText(), procedure));
 
-    if (function_)
+    if (instruction_)
+      instruction_->Semanticate();
+
+    if (function_) {
+      SemanticAnalyzer::current_function_ = "";
       function_->Semanticate();
+    }
   }
   else {
     throw SemanticError("function " + identifier_->GetText() + " is being defined multiple times");

@@ -60,8 +60,10 @@ class Expression {
                                                bool can_be_empty = false,
                                                bool can_have_string = false,
                                                bool can_have_comma = false);
-  virtual std::string Generate() = 0;
+  virtual std::string Generate(bool generate_more = true) = 0;
   virtual void Semanticate() = 0;
+
+  std::unique_ptr<Expression> GetMore() { return std::move(more_); }
 
  protected:
   std::unique_ptr<Expression> more_;

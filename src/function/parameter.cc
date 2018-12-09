@@ -66,8 +66,11 @@ std::unique_ptr<Parameter> Parameter::Construct(std::list<Token> &tokens, bool c
            type == TokenType::RSI ||
            type == TokenType::RDI) {
 
-    tokens.pop_front();
-    result = RegisterParameter::Construct(tokens, ConvertToParameterRegister(type));
+    throw SyntaxError("register parameters are not supported",
+        tokens.front().GetLine(),
+        tokens.front().GetColumn());
+    //tokens.pop_front();
+    //result = RegisterParameter::Construct(tokens, ConvertToParameterRegister(type));
   }
   else {
     if (can_be_empty) {

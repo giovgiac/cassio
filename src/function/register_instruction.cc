@@ -36,7 +36,7 @@ std::unique_ptr<Instruction> RegisterInstruction::Construct(std::list<Token> &to
 std::string RegisterInstruction::Generate() {
   std::ostringstream oss;
 
-  oss << value_->Generate();
+  oss << value_->Generate(false);
 
   if (type_ == RegisterType::RAX) {
     oss << "\tmov\trax, rax";

@@ -23,7 +23,7 @@ namespace cassio {
 class NotExpression : public Expression {
  public:
   static std::unique_ptr<Expression> Construct(std::unique_ptr<Expression> first);
-  std::string Generate() override;
+  std::string Generate(bool generate_more) override;
   void Semanticate() override;
 
  private:

@@ -67,7 +67,7 @@ std::unique_ptr<Expression> ValueExpression::Construct(std::list<Token> &tokens)
   return result;
 }
 
-std::string ValueExpression::Generate() {
+std::string ValueExpression::Generate(bool generate_more) {
   std::ostringstream oss;
 
   if (variable_) {
@@ -116,8 +116,10 @@ std::string ValueExpression::Generate() {
     }
   }
 
-  if (more_)
-    oss << more_->Generate();
+  if (generate_more) {
+    if (more_)
+      oss << more_->Generate();
+  }
 
   return oss.str();
 }

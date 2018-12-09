@@ -27,13 +27,15 @@ class Child {
  public:
   static std::unique_ptr<Child> Construct(std::list<Token> &tokens);
   std::string Generate();
-  void Semanticate();
+  void Semanticate(bool is_variable = false);
 
+  std::string GetName() const;
   std::string GetType() const;
 
  private:
   std::unique_ptr<Identifier> parent_;
   std::unique_ptr<Child> child_;
+  bool is_parameter;
 };
 
 }

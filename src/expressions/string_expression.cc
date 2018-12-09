@@ -21,14 +21,16 @@ std::unique_ptr<StringExpression> StringExpression::Construct(std::string string
   return result;
 }
 
-std::string StringExpression::Generate() {
+std::string StringExpression::Generate(bool generate_more) {
   std::ostringstream oss;
 
   oss << "\tmov\trax, string" << SemanticAnalyzer::literals_[id_].id_;
   oss << "\n";
 
-  if (more_)
-    oss << more_->Generate();
+  if (generate_more) {
+    if (more_)
+      oss << more_->Generate();
+  }
 
   return oss.str();
 }

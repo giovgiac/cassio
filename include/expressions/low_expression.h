@@ -38,7 +38,7 @@ enum class LowType {
 class LowExpression : public Expression {
  public:
   static std::unique_ptr<Expression> Construct(std::list<Token> &tokens, std::unique_ptr<Expression> first);
-  std::string Generate() override;
+  std::string Generate(bool generate_more) override;
   void Semanticate() override;
 
  private:

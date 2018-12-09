@@ -45,7 +45,7 @@ std::unique_ptr<Expression> LowExpression::Construct(std::list<Token> &tokens, s
   return std::move(result);
 }
 
-std::string LowExpression::Generate() {
+std::string LowExpression::Generate(bool generate_more) {
   std::ostringstream oss;
 
   if (type_ == LowType::MULTIPLY) {
@@ -67,8 +67,10 @@ std::string LowExpression::Generate() {
     oss << "\n";
   }
 
-  if (more_)
-    oss << more_->Generate();
+  if (generate_more) {
+    if (more_)
+      oss << more_->Generate();
+  }
 
   return oss.str();
 }
@@ -79,6 +81,9 @@ void LowExpression::Semanticate() {
 
   if (second_)
     second_->Semanticate();
+
+  if (more_)
+    more_->Semanticate();
 }
 
 }

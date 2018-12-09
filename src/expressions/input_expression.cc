@@ -30,7 +30,7 @@ std::unique_ptr<Expression> InputExpression::Construct(cassio::InputType type, s
   return result;
 }
 
-std::string InputExpression::Generate() {
+std::string InputExpression::Generate(bool generate_more) {
   std::ostringstream oss;
 
   if (type_ == InputType::INTEGER) {
@@ -54,8 +54,10 @@ std::string InputExpression::Generate() {
     oss << "\n";
   }
 
-  if (more_)
-    oss << more_->Generate();
+  if (generate_more) {
+    if (more_)
+      oss << more_->Generate();
+  }
 
   return oss.str();
 }

@@ -17,15 +17,17 @@ std::unique_ptr<Expression> NumberExpression::Construct(std::string number) {
   return result;
 }
 
-std::string NumberExpression::Generate() {
+std::string NumberExpression::Generate(bool generate_more) {
   std::ostringstream oss;
   uint64_t num = number_->GetNumber();
 
   oss << "\tmov\trax, " << num;
   oss << "\n";
 
-  if (more_)
-    oss << more_->Generate();
+  if (generate_more) {
+    if (more_)
+      oss << more_->Generate();
+  }
 
   return oss.str();
 }

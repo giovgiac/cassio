@@ -38,6 +38,8 @@ enum class ParameterType {
 class TypeParameter : public Parameter {
  public:
   static std::unique_ptr<Parameter> Construct(std::list<Token> &tokens, ParameterType type);
+  void GetArgument(std::list<struct Argument> &args) override;
+  void Semanticate() override;
 
  private:
   ParameterType type_;

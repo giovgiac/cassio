@@ -58,7 +58,7 @@ std::unique_ptr<LogicalExpression> LogicalExpression::Construct(std::list<Token>
   return std::move(result);
 }
 
-std::string LogicalExpression::Generate() {
+std::string LogicalExpression::Generate(bool generate_more) {
   std::ostringstream oss;
 
   oss << second_->Generate();
@@ -87,13 +87,20 @@ std::string LogicalExpression::Generate() {
     oss << "\tjbe\t";
   }
 
-  if (more_)
-    oss << more_->Generate();
+  if (generate_more) {
+    if (more_)
+      oss << more_->Generate();
+  }
 
   return oss.str();
 }
 
 void LogicalExpression::Semanticate() {
+  if (first_)
+    first_->Semanticate();
+
+  if (second_)
+    second_->Semanticate();
 
   if (more_)
     throw SemanticError("unexpected multiple expressions at logical expression");

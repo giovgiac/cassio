@@ -61,7 +61,7 @@ std::string WhileInstruction::Generate() {
   oss << "\n";
   oss << "while_cond" << id_ << ":";
   oss << "\n";
-  oss << condition_->Generate() << "while_body" << id_;
+  oss << condition_->Generate(false) << "while_body" << id_;
   oss << "\n";
   oss << "\tjmp\t" << "while_end" << id_;
   oss << "\n";
@@ -85,7 +85,7 @@ std::string WhileInstruction::Generate() {
 }
 
 void WhileInstruction::Semanticate() {
-  condition_->Generate();
+  condition_->Generate(false);
 
   if (instruction_)
     instruction_->Semanticate();

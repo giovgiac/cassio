@@ -85,9 +85,10 @@ std::unique_ptr<Instruction> IfInstruction::Construct(std::list<Token> &tokens) 
 std::string IfInstruction::Generate() {
   std::ostringstream oss;
 
-  oss << condition_->Generate() << "if_body" << id_;
+  oss << condition_->Generate(false) << "if_body" << id_;
   oss << "\n";
   oss << "\tjmp\t" << "else_body" << id_;
+  oss << "\n";
   oss << "\n";
 
   oss << "if_body" << id_ << ":";

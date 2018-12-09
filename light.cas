@@ -18,19 +18,12 @@ data
     byte arr (10);
     word vec (15);
 code
-    function karalho() {
-
-
+    function karalho(byte num) <- byte {
+        return [num];
     };
 
     function cassio() {
-        [test] <- 0;
-
-        while ([test] < 100) {
-            [test] <- [test] + 1;
-            outputi([test]);
-        };
-
-        karalho();
+        [test] <- karalho(30);
+        outputi([test]);
     };
 

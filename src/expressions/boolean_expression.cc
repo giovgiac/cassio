@@ -42,7 +42,7 @@ std::unique_ptr<Expression> BooleanExpression::Construct(std::list<Token> &token
   return std::move(result);
 }
 
-std::string BooleanExpression::Generate() {
+std::string BooleanExpression::Generate(bool generate_more) {
   std::ostringstream oss;
 
   if (type_ == BooleanType::AND) {
@@ -62,8 +62,10 @@ std::string BooleanExpression::Generate() {
     oss << "\n";
   }
 
-  if (more_)
-    oss << more_->Generate();
+  if (generate_more) {
+    if (more_)
+      oss << more_->Generate();
+  }
 
   return oss.str();
 }
@@ -74,6 +76,9 @@ void BooleanExpression::Semanticate() {
 
   if (second_)
     second_->Semanticate();
+
+  if (more_)
+    more_->Semanticate();
 }
 
 }

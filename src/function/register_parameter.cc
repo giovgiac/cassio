@@ -6,6 +6,7 @@
  *
  */
 
+#include <analyzer/semantic_analyzer.h>
 #include <function/register_parameter.h>
 
 namespace cassio {
@@ -15,6 +16,16 @@ std::unique_ptr<Parameter> RegisterParameter::Construct(std::list<Token> &tokens
 
   result->register_ = reg;
   return result;
+}
+
+void RegisterParameter::GetArgument(std::list<cassio::Argument> &args) {
+  if (more_)
+    more_->GetArgument(args);
+}
+
+void RegisterParameter::Semanticate() {
+  if (more_)
+    more_->Semanticate();
 }
 
 }

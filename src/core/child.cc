@@ -15,6 +15,7 @@ namespace cassio {
 
 std::unique_ptr<Child> Child::Construct(std::list<Token> &tokens) {
   std::unique_ptr<Child> result = std::make_unique<Child>();
+  result->is_parameter = false;
 
   if (tokens.front().GetType() != TokenType::IDENTIFIER)
     throw SyntaxError("expected identifier",
@@ -37,15 +38,37 @@ std::unique_ptr<Child> Child::Construct(std::list<Token> &tokens) {
 std::string Child::Generate() {
   std::ostringstream oss;
 
-  if (child_) {
-    oss << SemanticAnalyzer::variables_[parent_->GetText()].name_;
-    oss << "." << child_->parent_->GetText();
+  if (!is_parameter) {
+    if (child_) {
+      oss << SemanticAnalyzer::variables_[parent_->GetText()].name_;
+      oss << "." << child_->parent_->GetText();
+    } else {
+      oss << SemanticAnalyzer::variables_[parent_->GetText()].name_;
+    }
   }
   else {
-    oss << SemanticAnalyzer::variables_[parent_->GetText()].name_;
+    auto var = SemanticAnalyzer::functions_[SemanticAnalyzer::current_function_];
+
+    uint64_t max_offset = 0;
+    for (auto& a: var.argument_)
+      max_offset += 8;
+
+    uint64_t cummulative_offset = 0;
+    for (auto& a: var.argument_) {
+      if (parent_->GetText() == a.name_) {
+        uint64_t off = max_offset - cummulative_offset + 8;
+        oss << "rbp + " << off;
+      }
+
+      cummulative_offset += 8;
+    }
   }
 
   return oss.str();
+}
+
+std::string Child::GetName() const {
+  return parent_->GetText();
 }
 
 std::string Child::GetType() const {
@@ -71,11 +94,26 @@ std::string Child::GetType() const {
     return "";
   }
   else {
-    return SemanticAnalyzer::variables_[parent_->GetText()].type_;
+    if (SemanticAnalyzer::variables_.find(parent_->GetText()) != SemanticAnalyzer::variables_.end()) {
+      return SemanticAnalyzer::variables_[parent_->GetText()].type_;
+    }
+    else {
+      if (!SemanticAnalyzer::current_function_.empty()) {
+        auto var = SemanticAnalyzer::functions_[SemanticAnalyzer::current_function_];
+
+        for (auto& a: var.argument_) {
+          if (parent_->GetText() == a.name_) {
+            return a.type_;
+          }
+        }
+      }
+    }
   }
+
+  return "";
 }
 
-void Child::Semanticate() {
+void Child::Semanticate(bool is_variable) {
   if (SemanticAnalyzer::variables_.find(parent_->GetText()) != SemanticAnalyzer::variables_.end()) {
     auto var = SemanticAnalyzer::variables_[parent_->GetText()];
 
@@ -99,7 +137,27 @@ void Child::Semanticate() {
     }
   }
   else {
-    throw SemanticError(parent_->GetText() + " is not defined");
+    if (!SemanticAnalyzer::current_function_.empty()) {
+      auto var = SemanticAnalyzer::functions_[SemanticAnalyzer::current_function_];
+      bool found = false;
+
+      for (auto& a: var.argument_) {
+        if (parent_->GetText() == a.name_) {
+          found = true;
+          is_parameter = true;
+          break;
+        }
+      }
+
+      if (is_variable)
+        throw SemanticError("cannot use parameter `" + parent_->GetText() + "` address");
+
+      if (!found)
+        throw SemanticError(parent_->GetText() + " is not defined");
+    }
+    else {
+      throw SemanticError(parent_->GetText() + " is not defined");
+    }
   }
 }
 

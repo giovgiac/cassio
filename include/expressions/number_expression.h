@@ -24,7 +24,7 @@ namespace cassio {
 class NumberExpression : public Expression {
  public:
   static std::unique_ptr<Expression> Construct(std::string number);
-  std::string Generate() override;
+  std::string Generate(bool generate_more) override;
   void Semanticate() override;
 
  private:

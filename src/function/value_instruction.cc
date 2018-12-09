@@ -89,25 +89,25 @@ std::string ValueInstruction::Generate() {
 
   if (type_ == ValueType::VARIABLE) {
     if (variable_->GetType() == "byte") {
-      oss << value_->Generate();
+      oss << value_->Generate(false);
       oss << "\tmov\t";
       oss << variable_->GetType() << " [" << variable_->Generate() << "]";
       oss << ", al";
       oss << "\n";
     } else if (variable_->GetType() == "word") {
-      oss << value_->Generate();
+      oss << value_->Generate(false);
       oss << "\tmov\t";
       oss << variable_->GetType() << " [" << variable_->Generate() << "]";
       oss << ", ax";
       oss << "\n";
     } else if (variable_->GetType() == "dword") {
-      oss << value_->Generate();
+      oss << value_->Generate(false);
       oss << "\tmov\t";
       oss << variable_->GetType() << " [" << variable_->Generate() << "]";
       oss << ", eax";
       oss << "\n";
     } else if (variable_->GetType() == "qword") {
-      oss << value_->Generate();
+      oss << value_->Generate(false);
       oss << "\tmov\t";
       oss << variable_->GetType() << " [" << variable_->Generate() << "]";
       oss << ", rax";
@@ -121,27 +121,27 @@ std::string ValueInstruction::Generate() {
       throw SemanticError("rax cannot be used for address dereferencing");
     }
     else if (register_ == ValueRegister::RBX) {
-      oss << value_->Generate();
+      oss << value_->Generate(false);
       oss << "\tmov\t[rbx], rax";
       oss << "\n";
     }
     else if (register_ == ValueRegister::RCX) {
-      oss << value_->Generate();
+      oss << value_->Generate(false);
       oss << "\tmov\t[rcx], rax";
       oss << "\n";
     }
     else if (register_ == ValueRegister::RDX) {
-      oss << value_->Generate();
+      oss << value_->Generate(false);
       oss << "\tmov\t[rdx], rax";
       oss << "\n";
     }
     else if (register_ == ValueRegister::RSI) {
-      oss << value_->Generate();
+      oss << value_->Generate(false);
       oss << "\tmov\t[rsi], rax";
       oss << "\n";
     }
     else if (register_ == ValueRegister::RDI) {
-      oss << value_->Generate();
+      oss << value_->Generate(false);
       oss << "\tmov\t[rdi], rax";
       oss << "\n";
     }
