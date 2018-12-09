@@ -181,6 +181,9 @@ void Function::Semanticate() {
     Procedure procedure = {};
     std::list<Argument> args;
 
+    if (identifier_->GetText() == "cassio" && return_type_ != ReturnType::VOID)
+      throw SemanticError("function `cassio` has to return void");
+
     if (identifier_->GetText() == "cassio")
       procedure.name_ = identifier_->GetText();
     else

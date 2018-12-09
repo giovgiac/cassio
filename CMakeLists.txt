@@ -11,28 +11,6 @@ INCLUDE_DIRECTORIES(
         "include"
 )
 
-# Debug Files
-CONFIGURE_FILE(
-        ${CMAKE_CURRENT_SOURCE_DIR}/exhaust.cas
-        ${CMAKE_CURRENT_BINARY_DIR}
-        COPYONLY
-)
-CONFIGURE_FILE(
-        ${CMAKE_CURRENT_SOURCE_DIR}/factorial.cas
-        ${CMAKE_CURRENT_BINARY_DIR}
-        COPYONLY
-)
-CONFIGURE_FILE(
-        ${CMAKE_CURRENT_SOURCE_DIR}/light.cas
-        ${CMAKE_CURRENT_BINARY_DIR}
-        COPYONLY
-)
-CONFIGURE_FILE(
-        ${CMAKE_CURRENT_SOURCE_DIR}/vector.cas
-        ${CMAKE_CURRENT_BINARY_DIR}
-        COPYONLY
-)
-
 SET(CMAKE_CXX_STANDARD 17)
 SET(SOURCES
         src/cassio.cc
@@ -75,6 +53,7 @@ SET(SOURCES
         src/analyzer/code_generator.cc
         src/function/output_instruction.cc
         src/expressions/input_expression.cc)
+
 SET(HEADERS
         include/analyzer/lexical_analyzer.h
         include/tokens/token.h

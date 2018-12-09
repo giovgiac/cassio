@@ -1,0 +1,33 @@
+data
+    struct Point {
+        dword x;
+        dword y;
+        dword z;
+    };
+
+    Point src;
+    Point dst;
+
+code
+    function cassio() {
+        outputs("Insira a coordenada x da origem: ");
+        [src.x] <- inputi();
+        outputs("Insira a coordenada y da origem: ");
+        [src.y] <- inputi();
+        outputs("Insira a coordenada z da origem: ");
+        [src.z] <- inputi();
+
+        outputs("Insira a coordenada x do destino: ");
+        [dst.x] <- inputi();
+        outputs("Insira a coordenada y do destino: ");
+        [dst.y] <- inputi();
+        outputs("Insira a coordenada z do destino: ");
+        [dst.z] <- inputi();
+
+        outputs("Soma das coordenadas x: ");
+        outputi([src.x] + [dst.x]);
+        outputs("Soma das coordenadas y: ");
+        outputi([src.y] + [dst.y]);
+        outputs("Soma das coordenadas z: ");
+        outputi([src.z] + [dst.z]);
+    };

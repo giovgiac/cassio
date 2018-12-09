@@ -66,6 +66,17 @@ std::string LowExpression::Generate(bool generate_more) {
     oss << "\tdiv\trbx";
     oss << "\n";
   }
+  else if (type_ == LowType::MODULUS) {
+    oss << second_->Generate();
+    oss << "\tmov\trbx, rax";
+    oss << "\n";
+    oss << first_->Generate();
+    oss << "\txor\trdx, rdx";
+    oss << "\n";
+    oss << "\tdiv\trbx";
+    oss << "\n";
+    oss << "\tmov\trax, rdx";
+  }
 
   if (generate_more) {
     if (more_)

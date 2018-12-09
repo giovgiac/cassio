@@ -1,0 +1,18 @@
+data
+    qword num;
+
+code
+    function fact(qword n) <- qword {
+        if ([n] == 0) {
+            return 1;
+        };
+        else {
+            return [n] * fact([n] - 1);
+        };
+    };
+
+    function cassio() {
+        outputs("Número do qual você deseja o fatorial: ");
+        [num] <- inputi();
+        outputi(fact([num]));
+    };

@@ -462,18 +462,18 @@ std::string Program::Generate() {
   oss << "; Data Section:\n"
          "; ======================================================================\n"
          "segment readable writeable\n";
-  oss << "\tprint_integer_fmt\t\tdb \"%d\", 10, 13, 0";
+  oss << "\tprint_integer_fmt\t\tdb \"%u\", 10, 13, 0";
   oss << "\n";
   oss << "\tprint_string_fmt\t\tdb \"%s\", 10, 13, 0";
   oss << "\n";
-  oss << "\tscanf_integer_fmt\t\tdb \"%d\", 0";
+  oss << "\tscanf_integer_fmt\t\tdb \"%u\", 0";
   oss << "\n";
   oss << "\tscanf_string_fmt\t\tdb \"%s\", 0";
   oss << "\n";
   for (auto &e : SemanticAnalyzer::literals_) {
-         auto lt = e.second;
-         oss << "\tstring" << lt.id_ << "\t\t\t\tdb " << "\"" << lt.string_ << "\", 0";
-         oss << "\n";
+    auto lt = e.second;
+    oss << "\tstring" << lt.id_ << "\t\t\t\tdb " << "\"" << lt.string_ << "\", 0";
+    oss << "\n";
   }
   oss << "\n";
 
@@ -483,15 +483,19 @@ std::string Program::Generate() {
          "segment readable writeable\n";
   oss << "\tscanf_read\t\tdq ?";
   oss << "\n\n";
-  oss << declaration_->Generate();
-  oss << "\n\n";
+  if (declaration_) {
+    oss << declaration_->Generate();
+    oss << "\n\n";
+  }
 
   // Add Code Section
   oss << "; Code Section:\n"
          "; ======================================================================\n"
          "segment readable executable\n\n";
 
-  oss << function_->Generate();
+  if (function_) {
+    oss << function_->Generate();
+  }
 
   // Add Library Linking
   oss << "; Library Section:\n"
@@ -505,8 +509,11 @@ std::string Program::Generate() {
 }
 
 void Program::Semanticate() {
-  declaration_->Semanticate();
-  function_->Semanticate();
+  if (declaration_)
+    declaration_->Semanticate();
+
+  if (function_)
+    function_->Semanticate();
 }
 
 }

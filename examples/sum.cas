@@ -1,0 +1,19 @@
+data
+    qword num;
+    qword ind;
+    qword sum;
+
+code
+    function cassio() {
+        outputs("Até qual número efetuar a soma: ");
+        [num] <- inputi();
+        [ind] <- 1;
+
+        while ([ind] <= [num]) {
+            [sum] <- [sum] + [ind];
+            [ind] <- [ind] + 1;
+        };
+
+        outputs("A soma é igual a: ");
+        outputi([sum]);
+    };

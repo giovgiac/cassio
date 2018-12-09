@@ -4,6 +4,8 @@
  *
  * @copyright Copyright (c) 2018 All Rights Reserved.
  *
+ * Code available at: https://github.com/giovgiac/cassio
+ *
  */
 
 #include <analyzer/code_generator.h>

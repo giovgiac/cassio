@@ -1,0 +1,26 @@
+data
+    struct Point {
+        dword x;
+        dword y;
+    };
+
+    qword num1;
+    qword num2;
+
+code
+    function sum(qword x, qword y) <- qword {
+        return [x] + [y];
+    };
+    
+    function cassio() {
+        [num1] <- inputi();
+        [num2] <- inputi();
+        
+        if (([num1] + [num2]) > 10) {
+            rax <- sum([num1], [num2]);
+            outputi(rax);
+        };
+        else {
+            outputs("Prefiro me comunicar com as maquinas.");
+        };
+    };
